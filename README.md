@@ -106,5 +106,15 @@ pnpm dlx shadcn@latest add <component-name>
 ## Deploying to Vercel
 
 1. Push to GitHub and import in [Vercel](https://vercel.com)
-2. Add all four env vars in the Vercel dashboard
+2. Add `DATABASE_URL`, `AUTH_SECRET`, `AUTH_URL`, `AUTH_TRUST_HOST`, `GOOGLE_CLIENT_ID`, and `GOOGLE_CLIENT_SECRET`
 3. Update Google OAuth redirect URI to `https://your-domain.com/api/auth/callback/google`
+
+## Vercel OAuth Checklist
+
+If Google sign-in returns 400 on Vercel, verify these items:
+
+1. `AUTH_SECRET` is set in Vercel.
+2. `AUTH_URL` is your deployed HTTPS domain, not `localhost`.
+3. `AUTH_TRUST_HOST=true` is set in Vercel.
+4. Google OAuth has the exact redirect URI:
+   `https://your-domain.com/api/auth/callback/google`
