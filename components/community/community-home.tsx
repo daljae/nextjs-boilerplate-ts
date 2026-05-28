@@ -2,22 +2,13 @@
 
 import { useId, useState, type FormEvent } from "react"
 import {
-  Bell,
-  Bookmark,
   Heart,
   MessageCircle,
-  PencilLine,
+  Bookmark,
   TrendingUp,
+  Bell,
+  PencilLine,
 } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 
 type Post = {
   id: number
@@ -48,7 +39,7 @@ const initialPosts: Post[] = [
     id: 2,
     author: "Admin",
     tag: "Notice",
-    title: "This week`s community guide",
+    title: "This week's community guide",
     content:
       "Be kind to each other and keep questions specific. Featured posts will be pinned to the top.",
     time: "18m ago",
@@ -66,32 +57,21 @@ export function CommunityHome({ userName }: { userName: string }) {
   const [posts, setPosts] = useState<Post[]>(initialPosts)
 
   const notices = [
-    {
-      title: "Notice",
-      body: "Weekly best posts are pinned every evening at 8 PM.",
-    },
-    {
-      title: "Rules",
-      body: "Only logged-in users can create posts and comments.",
-    },
+    { title: "Notice", body: "Weekly best posts are pinned every evening at 8 PM." },
+    { title: "Rules", body: "Only logged-in users can create posts and comments." },
   ]
 
   const popularPosts = posts
     .slice()
-    .sort(
-      (a, b) =>
-        b.likes + b.comments.length * 4 - (a.likes + a.comments.length * 4)
-    )
+    .sort((a, b) => b.likes + b.comments.length * 4 - (a.likes + a.comments.length * 4))
     .slice(0, 3)
 
   const recentPosts = posts.slice().sort((a, b) => b.id - a.id)
 
   function handleCreatePost(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-
     const nextTitle = draftTitle.trim()
     const nextContent = draftContent.trim()
-
     if (!nextTitle || !nextContent) return
 
     setPosts((current) => [
@@ -108,7 +88,6 @@ export function CommunityHome({ userName }: { userName: string }) {
       },
       ...current,
     ])
-
     setDraftTitle("")
     setDraftContent("")
   }
@@ -116,7 +95,6 @@ export function CommunityHome({ userName }: { userName: string }) {
   function handleAddComment(postId: number) {
     const value = commentDrafts[postId]?.trim()
     if (!value) return
-
     setPosts((current) =>
       current.map((post) =>
         post.id === postId
@@ -124,7 +102,6 @@ export function CommunityHome({ userName }: { userName: string }) {
           : post
       )
     )
-
     setCommentDrafts((current) => ({ ...current, [postId]: "" }))
   }
 
@@ -145,253 +122,261 @@ export function CommunityHome({ userName }: { userName: string }) {
   }
 
   return (
-    <div className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(255,199,125,0.25),_transparent_34%),radial-gradient(circle_at_top_right,_rgba(99,102,241,0.14),_transparent_28%),linear-gradient(180deg,_var(--background),_oklch(0.985_0_0)_60%,_var(--background))] px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
-        <aside className="space-y-6">
-          <Card className="border-border/60 bg-card/90 shadow-sm backdrop-blur">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
-                  CAFE
-                </span>
-                Community Home
-              </CardTitle>
-              <CardDescription>
-                {userName}, here is your personalized feed with notices and popular posts.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-              <div className="rounded-2xl border border-border/70 bg-muted/50 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Members
-                </p>
-                <p className="mt-2 text-2xl font-semibold">12.4k</p>
-              </div>
-              <div className="rounded-2xl border border-border/70 bg-muted/50 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Posts Today
-                </p>
-                <p className="mt-2 text-2xl font-semibold">{posts.length + 18}</p>
-              </div>
-              <div className="rounded-2xl border border-border/70 bg-muted/50 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Replies
-                </p>
-                <p className="mt-2 text-2xl font-semibold">
-                  {posts.reduce((total, post) => total + post.comments.length, 0)}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+    <div className="bg-background">
+      {/* Hero Section - Apple Cinematic Style */}
+      <section className="border-b border-border/60 bg-secondary py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <p className="text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
+            Welcome back, {userName}
+          </p>
+          <h1
+            id={titleId}
+            className="mt-4 text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
+            style={{ lineHeight: 1.1, letterSpacing: "-0.015em" }}
+          >
+            Discover stories that{" "}
+            <span className="text-primary">inspire.</span>
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground" style={{ fontSize: "17px", lineHeight: 1.47 }}>
+            Your personalized feed with the latest notices and trending conversations from the community.
+          </p>
+        </div>
+      </section>
 
-          <Card className="border-border/60 bg-card/90 shadow-sm backdrop-blur">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Bell className="size-4" />
-                Notices
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {notices.map((notice) => (
-                <div
-                  key={notice.title}
-                  className="rounded-2xl border border-border/70 bg-muted/40 p-4"
-                >
-                  <p className="text-sm font-semibold">{notice.title}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{notice.body}</p>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+      {/* Stats Tiles - Apple Edge-to-Edge */}
+      <section className="grid sm:grid-cols-3">
+        <div className="flex flex-col items-center justify-center bg-card p-10 text-center">
+          <p className="text-3xl font-semibold tracking-tight text-foreground">12.4k</p>
+          <p className="mt-1 text-sm text-muted-foreground">Members</p>
+        </div>
+        <div className="flex flex-col items-center justify-center bg-secondary p-10 text-center">
+          <p className="text-3xl font-semibold tracking-tight text-foreground">{posts.length + 18}</p>
+          <p className="mt-1 text-sm text-muted-foreground">Posts Today</p>
+        </div>
+        <div className="flex flex-col items-center justify-center bg-card p-10 text-center">
+          <p className="text-3xl font-semibold tracking-tight text-foreground">
+            {posts.reduce((total, post) => total + post.comments.length, 0)}
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">Replies</p>
+        </div>
+      </section>
 
-          <Card className="border-border/60 bg-card/90 shadow-sm backdrop-blur">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="size-4" />
-                Popular
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {popularPosts.map((post, index) => (
-                <div
-                  key={post.id}
-                  className="rounded-2xl border border-border/70 bg-muted/40 p-4"
-                >
-                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                    #{index + 1}
-                  </p>
-                  <p className="mt-2 font-semibold">{post.title}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {post.author} · Likes {post.likes} · Replies {post.comments.length}
-                  </p>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </aside>
-
-        <section aria-labelledby={titleId} className="space-y-6">
-          <div className="overflow-hidden rounded-[2rem] border border-border/60 bg-card/90 shadow-[0_30px_60px_rgba(0,0,0,0.08)] backdrop-blur">
-            <div className="border-b border-border/60 px-6 py-5 sm:px-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-muted-foreground">
-                Community Home
-              </p>
-              <h1
-                id={titleId}
-                className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl"
-              >
-                Catch the latest stories first
-              </h1>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-                This prototype centers notices and popular posts. Post creation and comments
-                happen inline so the page feels like a real community home.
-              </p>
+      {/* Main Content */}
+      <div className="mx-auto max-w-7xl px-6 py-12">
+        <div className="grid gap-12 lg:grid-cols-[320px_1fr]">
+          {/* Sidebar */}
+          <aside className="space-y-8">
+            {/* Notices */}
+            <div>
+              <div className="flex items-center gap-2">
+                <Bell className="size-4 text-muted-foreground" />
+                <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                  Notices
+                </h2>
+              </div>
+              <div className="mt-4 space-y-3">
+                {notices.map((notice) => (
+                  <div key={notice.title} className="rounded-2xl bg-secondary p-5">
+                    <p className="text-sm font-semibold text-foreground">{notice.title}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{notice.body}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="grid gap-4 px-6 py-6 sm:px-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
-              <Card className="border-border/70 bg-muted/35">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <PencilLine className="size-4" />
-                    Write a post
-                  </CardTitle>
-                  <CardDescription>
-                    New posts appear at the top of the feed immediately.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleCreatePost} className="space-y-4">
-                    <input
-                      value={draftTitle}
-                      onChange={(event) => setDraftTitle(event.target.value)}
-                      placeholder="Enter a title"
-                      className="w-full rounded-xl border border-border/70 bg-background px-4 py-3 text-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
-                    />
-                    <textarea
-                      value={draftContent}
-                      onChange={(event) => setDraftContent(event.target.value)}
-                      placeholder="Enter the post content"
-                      rows={6}
-                      className="w-full resize-none rounded-2xl border border-border/70 bg-background px-4 py-3 text-sm leading-6 outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
-                    />
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-xs text-muted-foreground">
-                        Only logged-in users can post.
-                      </p>
-                      <Button type="submit">Publish</Button>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
+            {/* Popular */}
+            <div>
+              <div className="flex items-center gap-2">
+                <TrendingUp className="size-4 text-muted-foreground" />
+                <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                  Popular
+                </h2>
+              </div>
+              <div className="mt-4 space-y-3">
+                {popularPosts.map((post, index) => (
+                  <div key={post.id} className="rounded-2xl bg-secondary p-5">
+                    <p className="text-xs font-medium text-primary">#{index + 1}</p>
+                    <p className="mt-2 font-semibold text-foreground">{post.title}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {post.author} · {post.likes} likes
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </aside>
 
-              <Card className="border-border/70 bg-muted/35">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <MessageCircle className="size-4" />
-                    Recent activity
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {recentPosts.slice(0, 4).map((post) => (
-                    <div
-                      key={post.id}
-                      className="rounded-2xl border border-border/70 bg-background p-4"
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <p className="text-sm font-semibold">{post.title}</p>
-                        <span className="rounded-full bg-secondary px-2.5 py-1 text-xs text-secondary-foreground">
+          {/* Main Feed */}
+          <section aria-labelledby={titleId} className="space-y-8">
+            {/* Write Post Card - Apple Style */}
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <div className="flex items-center gap-2">
+                <PencilLine className="size-4 text-muted-foreground" />
+                <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                  Write a post
+                </h2>
+              </div>
+              <form onSubmit={handleCreatePost} className="mt-5 space-y-4">
+                <input
+                  value={draftTitle}
+                  onChange={(e) => setDraftTitle(e.target.value)}
+                  placeholder="Enter a title"
+                  className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+                <textarea
+                  value={draftContent}
+                  onChange={(e) => setDraftContent(e.target.value)}
+                  placeholder="What's on your mind?"
+                  rows={4}
+                  className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm leading-relaxed text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-muted-foreground">Only logged-in users can post.</p>
+                  <button
+                    type="submit"
+                    className="rounded-full bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-transform active:scale-95"
+                  >
+                    Publish
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Recent Activity */}
+            <div>
+              <div className="flex items-center gap-2">
+                <MessageCircle className="size-4 text-muted-foreground" />
+                <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                  Recent activity
+                </h2>
+              </div>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {recentPosts.slice(0, 4).map((post) => (
+                  <div key={post.id} className="rounded-2xl bg-secondary p-5">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="font-semibold text-foreground">{post.title}</p>
+                      <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                        {post.tag}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {post.author} · {post.time}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Post List - Apple Clean Cards */}
+            <div className="space-y-4">
+              {recentPosts.map((post) => (
+                <article key={post.id} className="rounded-2xl border border-border bg-card">
+                  {/* Post Header */}
+                  <div className="border-b border-border/60 p-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
                           {post.tag}
                         </span>
+                        <h3 className="mt-3 text-xl font-semibold text-foreground">{post.title}</h3>
                       </div>
-                      <p className="mt-2 text-sm text-muted-foreground">
-                        {post.author} · {post.time}
-                      </p>
-                      <p className="mt-2 text-sm text-muted-foreground">
-                        Likes {post.likes} · Replies {post.comments.length}
-                      </p>
+                      <p className="shrink-0 text-sm text-muted-foreground">{post.time}</p>
                     </div>
-                  ))}
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {recentPosts.map((post) => (
-              <Card
-                key={post.id}
-                className="border-border/60 bg-card/90 shadow-sm backdrop-blur"
-              >
-                <CardHeader className="gap-3 border-b border-border/60">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                        {post.tag}
-                      </p>
-                      <CardTitle className="mt-1 text-xl">{post.title}</CardTitle>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{post.time}</p>
-                  </div>
-                  <CardDescription>
-                    {post.author} · Likes {post.likes} · Replies {post.comments.length}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-5 py-5">
-                  <p className="text-sm leading-6 text-foreground/90">{post.content}</p>
-
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Button variant="secondary" size="sm" onClick={() => handleLike(post.id)}>
-                      <Heart className="mr-1.5 size-4" />
-                      Like
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleBookmark(post.id)}>
-                      <Bookmark className="mr-1.5 size-4" />
-                      {post.bookmarked ? "Bookmarked" : "Bookmark"}
-                    </Button>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {post.author} · {post.likes} likes · {post.comments.length} replies
+                    </p>
                   </div>
 
-                  <div className="space-y-3">
-                    <p className="text-sm font-medium">Comments</p>
-                    <div className="space-y-2">
-                      {post.comments.length === 0 ? (
-                        <p className="rounded-2xl border border-dashed border-border/70 bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
-                          No comments yet. Be the first one to reply.
-                        </p>
-                      ) : (
-                        post.comments.map((comment, index) => (
-                          <div
-                            key={`${post.id}-${index}`}
-                            className="rounded-2xl border border-border/70 bg-muted/30 px-4 py-3 text-sm leading-6"
-                          >
-                            {comment}
+                  {/* Post Content */}
+                  <div className="p-6">
+                    <p className="text-base leading-relaxed text-foreground" style={{ fontSize: "17px", lineHeight: 1.47 }}>
+                      {post.content}
+                    </p>
+
+                    {/* Actions - Apple Pill Style */}
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      <button
+                        onClick={() => handleLike(post.id)}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-4 py-2 text-sm font-medium text-foreground transition-transform active:scale-95"
+                      >
+                        <Heart className="size-4" />
+                        Like
+                      </button>
+                      <button
+                        onClick={() => handleBookmark(post.id)}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-transparent px-4 py-2 text-sm font-medium text-foreground transition-transform active:scale-95"
+                      >
+                        <Bookmark className={`size-4 ${post.bookmarked ? "fill-primary text-primary" : ""}`} />
+                        {post.bookmarked ? "Saved" : "Save"}
+                      </button>
+                    </div>
+
+                    {/* Comments */}
+                    <div className="mt-6 border-t border-border/60 pt-6">
+                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                        Comments
+                      </p>
+                      <div className="mt-4 space-y-2">
+                        {post.comments.length === 0 ? (
+                          <div className="rounded-xl border border-dashed border-border bg-secondary/50 p-4 text-center">
+                            <p className="text-sm text-muted-foreground">
+                              No comments yet. Be the first to reply.
+                            </p>
                           </div>
-                        ))
-                      )}
-                    </div>
+                        ) : (
+                          post.comments.map((comment, idx) => (
+                            <div key={idx} className="rounded-xl bg-secondary p-4">
+                              <p className="text-sm text-foreground">{comment}</p>
+                            </div>
+                          ))
+                        )}
+                      </div>
 
-                    <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
-                      <input
-                        value={commentDrafts[post.id] ?? ""}
-                        onChange={(event) =>
-                          setCommentDrafts((current) => ({
-                            ...current,
-                            [post.id]: event.target.value,
-                          }))
-                        }
-                        placeholder="Write a comment"
-                        className="w-full rounded-xl border border-border/70 bg-background px-4 py-3 text-sm outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
-                      />
-                      <Button type="button" onClick={() => handleAddComment(post.id)}>
-                        Reply
-                      </Button>
+                      {/* Comment Input */}
+                      <div className="mt-4 flex gap-3">
+                        <input
+                          value={commentDrafts[post.id] ?? ""}
+                          onChange={(e) =>
+                            setCommentDrafts((c) => ({ ...c, [post.id]: e.target.value }))
+                          }
+                          placeholder="Write a comment..."
+                          className="flex-1 rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        />
+                        <button
+                          onClick={() => handleAddComment(post.id)}
+                          className="rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-transform active:scale-95"
+                        >
+                          Reply
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
       </div>
+
+      {/* Footer - Apple Parchment Style */}
+      <footer className="border-t border-border/60 bg-secondary py-12">
+        <div className="mx-auto max-w-7xl px-6 text-center">
+          <p className="text-xs text-muted-foreground">
+            © 2026 Community. All rights reserved.
+          </p>
+          <div className="mt-4 flex justify-center gap-6">
+            <button className="text-xs text-primary transition-colors hover:text-primary/80">
+              Privacy Policy
+            </button>
+            <button className="text-xs text-primary transition-colors hover:text-primary/80">
+              Terms of Service
+            </button>
+            <button className="text-xs text-primary transition-colors hover:text-primary/80">
+              Contact
+            </button>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
